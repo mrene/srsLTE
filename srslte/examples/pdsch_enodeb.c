@@ -120,42 +120,43 @@ void usage(char *prog) {
 
 void parse_args(int argc, char **argv) {
   int opt;
-  while ((opt = getopt(argc, argv, "aglfmoncpvu")) != -1) {
+  while ((opt = getopt(argc, argv, "a:g:l:f:m:o:n:c:p:vu:")) != -1) {
     switch (opt) {
     case 'a':
-      rf_args = argv[optind];
+      rf_args = optarg;
       break;
     case 'g':
-      rf_gain = atof(argv[optind]);
+      rf_gain = atof(optarg);
       break;
     case 'l':
-      rf_amp = atof(argv[optind]);
+      rf_amp = atof(optarg);
       break;
     case 'f':
-      rf_freq = atof(argv[optind]);
+      rf_freq = atof(optarg);
       break;
     case 'o':
-      output_file_name = argv[optind];
+      output_file_name = optarg;
       break;
     case 'm':
-      mcs_idx = atoi(argv[optind]);
+      mcs_idx = atoi(optarg);
       break;
     case 'u':
-      net_port = atoi(argv[optind]);
+      net_port = atoi(optarg);
       break;
     case 'n':
-      nof_frames = atoi(argv[optind]);
+      nof_frames = atoi(optarg);
       break;
     case 'p':
-      cell.nof_prb = atoi(argv[optind]);
+      cell.nof_prb = atoi(optarg);
       break;
     case 'c':
-      cell.id = atoi(argv[optind]);
+      cell.id = atoi(optarg);
       break;
     case 'v':
       srslte_verbose++;
       break;
     default:
+      fprintf(stderr, "Unknown option: -%c\n", opt);
       usage(argv[0]);
       exit(-1);
     }

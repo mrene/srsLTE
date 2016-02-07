@@ -151,61 +151,61 @@ void usage(prog_args_t *args, char *prog) {
 void parse_args(prog_args_t *args, int argc, char **argv) {
   int opt;
   args_default(args);
-  while ((opt = getopt(argc, argv, "aoglipPcOCtdDnvrfuUsS")) != -1) {
+  while ((opt = getopt(argc, argv, "a:o:g:l:i:p:P:c:O:C:t:d:D:n:vr:f:u:U:s:S:")) != -1) {
     switch (opt) {
     case 'i':
-      args->input_file_name = argv[optind];
+      args->input_file_name = optarg;
       break;
     case 'p':
-      args->file_nof_prb = atoi(argv[optind]);
+      args->file_nof_prb = atoi(optarg);
       break;
     case 'P':
-      args->file_nof_ports = atoi(argv[optind]);
+      args->file_nof_ports = atoi(optarg);
       break;
     case 'o':
-      args->file_offset_freq = atof(argv[optind]);
+      args->file_offset_freq = atof(optarg);
       break;
     case 'O':
-      args->file_offset_time = atoi(argv[optind]);
+      args->file_offset_time = atoi(optarg);
       break;
     case 'c':
-      args->file_cell_id = atoi(argv[optind]);
+      args->file_cell_id = atoi(optarg);
       break;
     case 'a':
-      args->rf_args = argv[optind];
+      args->rf_args = optarg;
       break;
     case 'g':
-      args->rf_gain = atof(argv[optind]);
+      args->rf_gain = atof(optarg);
       break;
     case 'C':
       args->disable_cfo = true;
       break;
     case 't':
-      args->time_offset = atoi(argv[optind]);
+      args->time_offset = atoi(optarg);
       break;
     case 'f':
-      args->rf_freq = strtod(argv[optind], NULL);
+      args->rf_freq = strtod(optarg, NULL);
       break;
     case 'n':
-      args->nof_subframes = atoi(argv[optind]);
+      args->nof_subframes = atoi(optarg);
       break;
     case 'r':
-      args->rnti = strtol(argv[optind], NULL, 16);
+      args->rnti = strtol(optarg, NULL, 16);
       break;
     case 'l':
-      args->force_N_id_2 = atoi(argv[optind]);
+      args->force_N_id_2 = atoi(optarg);
       break;
     case 'u':
-      args->net_port = atoi(argv[optind]);
+      args->net_port = atoi(optarg);
       break;
     case 'U':
-      args->net_address = argv[optind];
+      args->net_address = optarg;
       break;
     case 's':
-      args->net_port_signal = atoi(argv[optind]);
+      args->net_port_signal = atoi(optarg);
       break;
     case 'S':
-      args->net_address_signal = argv[optind];
+      args->net_address_signal = optarg;
       break;
     case 'd':
       args->disable_plots = true;
@@ -217,6 +217,7 @@ void parse_args(prog_args_t *args, int argc, char **argv) {
       srslte_verbose++;
       break;
     default:
+      fprintf(stderr, "Unknown option: -%c\n", opt);
       usage(args, argv[0]);
       exit(-1);
     }
