@@ -64,7 +64,7 @@ bool rf_blade_rx_wait_lo_locked(void *h)
   return true; 
 }
 
-const unsigned int num_buffers    = 256;
+const unsigned int num_buffers    = 4096;
 const unsigned int ms_buffer_size_rx = 1024; 
 const unsigned int buffer_size_tx = 1024;  
 const unsigned int num_transfers  = 32;
@@ -199,7 +199,7 @@ int rf_blade_open(char *args, void **h)
     fprintf(stderr, "Failed to set RX LNA gain: %s\n", bladerf_strerror(status));
     return status;
   }
-  status = bladerf_set_rxvga1(handler->dev, 27);
+  status = bladerf_set_rxvga2(handler->dev, 5);
   if (status != 0) {
     fprintf(stderr, "Failed to set RX VGA1 gain: %s\n", bladerf_strerror(status));
     return status;
@@ -270,11 +270,28 @@ double rf_blade_set_rx_gain(void *h, double gain)
 {
   int status; 
   rf_blade_handler_t *handler = (rf_blade_handler_t*) h;  
-  status = bladerf_set_rxvga2(handler->dev, (int) gain);
+
+  int vga1 = 0, vga2 = 0;
+
+  vga1 = gain > 30 ? 30 : gain;
+  vga2 = gain - vga1;
+
+  if (vga2 > 30) {
+    vga2 = 30;
+  }
+
+  status = bladerf_set_rxvga1(handler->dev, (int) vga1);
+  if (status != 0) {
+    fprintf(stderr, "Failed to set RX VGA1 gain: %s\n", bladerf_strerror(status));
+    return -1;
+  }
+
+  status = bladerf_set_rxvga2(handler->dev, (int) vga2);
   if (status != 0) {
     fprintf(stderr, "Failed to set RX VGA2 gain: %s\n", bladerf_strerror(status));
     return -1;
   }
+
   return rf_blade_get_rx_gain(h);
 }
 
